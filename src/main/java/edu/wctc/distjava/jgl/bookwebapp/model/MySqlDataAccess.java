@@ -14,11 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.Vector;
+import static jdk.nashorn.internal.objects.NativeRegExp.test;
 
 public class MySqlDataAccess implements DataAccess {
     private final int ALL_RECORDS = 0;
     private final boolean DEBUG=true;
-
+    private final String ERROR_INVALID_INPUT="Invalid input";
+    
+    
     private Connection conn;
     private Statement stmt;
     private PreparedStatement pstmt;
@@ -66,10 +69,7 @@ public class MySqlDataAccess implements DataAccess {
     
     
     
-    
-    
-    
-    
+    @Override
     public int deleteRecordById(String tableName, String pkColName, 
             Object pkValue) throws ClassNotFoundException, 
             SQLException {
@@ -125,7 +125,82 @@ public class MySqlDataAccess implements DataAccess {
         
         return rawData;
     }
+@Override
+    public final int updateById(String tableName, List<String> colNames, 
+            List<Object> colValues, String idColName, Object 
+                    idColValue) throws SQLException{
+        if(tableName == null || tableName.isEmpty() || colNames == null ||
+                colValues == null || idColName == null || 
+                idColName.isEmpty() || idColValue ==null){
+            throw new IllegalArgumentException(ERROR_INVALID_INPUT);
+        }
+        int recordsUpdated = 0;
+        
+        String sql = "UPDATE " + tableName + " SET ";
+        
+        StringJoiner sj = new StringJoiner(",");
+        
+        for(String colName : colNames){
+            sj.add(colName + " = ?");
+        }
+        sql += sj.toString();
+        
+        sql += " WHERE " + idColName + " = " + " ? ";
+        pstmt = conn.prepareStatement(sql);
+        
+        for(int i =0;i < colNames.size() ; i++){
+           pstmt.setObject(i+1, colValues.get(i));
+        }
+        
+        pstmt.setObject(colNames.size()+1, idColValue);
+        recordsUpdated = pstmt.executeUpdate();
 
+        return recordsUpdated;
+    }
+    /**
+     * 
+     * @param tableName
+     * @param colNames
+     * @param colValues
+     * @return
+     * @throws SQLException 
+     */
+    @Override
+    public final int insertInto(String tableName, List<String> colNames, List<Object> 
+            colValues) throws SQLException{
+        if(tableName == null || tableName.isEmpty() || colNames == null ||
+                colValues == null){
+             throw new IllegalArgumentException(ERROR_INVALID_INPUT);
+        }
+        int recordsInserted = 0;
+        
+        String sql = "INSERT INTO " + tableName + " ";
+        StringJoiner sj = new StringJoiner(",","(",")");
+        
+        for(String colName : colNames){
+            sj.add(colName);
+        }
+        sql += sj.toString();
+        sql += " VALUES ";
+        
+        sj = new StringJoiner(",","(",")");
+        
+        for(Object colValue : colValues){
+            sj.add("?");
+        }
+        
+        sql += sj.toString();
+        
+        pstmt = conn.prepareStatement(sql);
+        
+        for(int i = 0; i < colValues.size(); i++){
+            pstmt.setObject(i+1, colValues.get(i));
+        }
+        
+        recordsInserted = pstmt.executeUpdate();
+        
+        return recordsInserted;
+    }
   
     
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
@@ -144,6 +219,23 @@ public class MySqlDataAccess implements DataAccess {
 //                "root", "admin");
 //     
 //        
+         List<String> colNamesUpdate = new ArrayList<>();
+        colNamesUpdate.add("author_name");
+        colNamesUpdate.add("date_added");
+        List<Object> colValuesUpdate = new ArrayList<>();
+        colValuesUpdate.add("TEST TEST TEST");
+        colValuesUpdate.add("2011-11-11"); 
+
+
+       db.updateById("author", colNamesUpdate, colValuesUpdate, "author_id", "12");
+        
+
+
+
+
+
+
+
 //        int recsDeleted = db.deleteRecordById("author", "author_id", new Integer(52));
 //        System.out.println("No. of Recs Deleted: " + recsDeleted);
 //        List<Map<String,Object>> list = db.getAllRecords("author", 0);

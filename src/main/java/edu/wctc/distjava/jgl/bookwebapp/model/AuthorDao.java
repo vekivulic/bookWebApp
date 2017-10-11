@@ -151,5 +151,10 @@ public class AuthorDao implements IAuthorDao {
                 + a.getAuthorName() + ", " + a.getDateAdded() + "\n");
         }
     }
+
+    @Override
+    public int updateAuthorById(String authorTableName, List<String> colNames, List<Object> colValues, String authorIdColName, Object authorId) throws SQLException, ClassNotFoundException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
