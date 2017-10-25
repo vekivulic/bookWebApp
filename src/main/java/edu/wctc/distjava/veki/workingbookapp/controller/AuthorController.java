@@ -58,6 +58,17 @@ public class AuthorController extends HttpServlet {
     public static final String DATE_ADDED_COL_NAME = "date_added";
     public static final int MAX_RECORDS = 50;
     
+    private String driverClass; 
+    private String url;
+    private String username;
+    private String password;
+
+    
+    
+    
+    
+    
+    
     private LocalDateTime currentDate;
     private static final DateTimeFormatter dateTimeFormatter = 
             DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -76,12 +87,25 @@ public class AuthorController extends HttpServlet {
         String requestType = request.getParameter(REQUEST_TYPE);
         String destination = HOME_PAGE;
         try {
-            AuthorService authorService = new AuthorService(
-                new AuthorDao(
-                        new MySqlDataAccess(),"com.mysql.jdbc.Driver", 
-                        "jdbc:mysql://localhost:3306/book", 
-                        "root", "admin")
-                        );
+//            AuthorService authorService = new AuthorService(
+//                new AuthorDao(
+//                        new MySqlDataAccess(),"com.mysql.jdbc.Driver", 
+//                        "jdbc:mysql://localhost:3306/book", 
+//                        "root", "admin")
+//                        );
+//            AuthorDao dao= new AuthorDao(new MySqlDataAccess(),driverClass, url, username, password);
+//
+//
+//            AuthorService authorService = new AuthorService(dao);
+//            
+//      
+
+
+
+            AuthorService authorService = new AuthorService(new AuthorDao(new MySqlDataAccess(),
+                    driverClass, url, username, password));
+
+
             if(requestType.equalsIgnoreCase(RTYPE_AUTHOR_LIST)){
                 destination = AUTHOR_LIST_PAGE;
                 List<Author> authors = authorService.retrieveAuthors(
@@ -193,4 +217,16 @@ public class AuthorController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    @Override
+    public void init() throws ServletException {
+        driverClass = getServletContext().getInitParameter("db.driver.class");
+        url = getServletContext().getInitParameter("db.url");
+        username = getServletContext().getInitParameter("db.username");
+        password = getServletContext().getInitParameter("db.password");
+    }
+
+
+    
+    
+    
 }

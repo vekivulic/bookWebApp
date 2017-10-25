@@ -44,9 +44,9 @@ import java.util.StringJoiner;
     //null first then empty 
     public final void openConnection(String driverClass, String url, String userName, 
             String password) throws ClassNotFoundException, SQLException{
-        if(driverClass.isEmpty() || driverClass == null || userName.isEmpty() ||
-                userName == null || password.isEmpty() || password == null ||
-                url.isEmpty() || url == null){        
+        if(driverClass==null || driverClass.isEmpty() || userName==null ||
+                userName.isEmpty() || password==null || password.isEmpty()||
+                url==null|| url.isEmpty()){        
             throw new IllegalArgumentException(ERROR_INVALID_INPUT);
         }
         

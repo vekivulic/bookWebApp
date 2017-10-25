@@ -9,6 +9,11 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
+
+
+
+
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -18,9 +23,13 @@
     </head>
     <div class="container"> 
         <body>
+
+
             <h1>
                 Author List
             </h1>
+            
+            
             <br>
             <form id="authorFormDelete" name="authorFormDelete" method="POST" action="ac?rType=deleteAuthor">  
                 <button type="submit" class="btn btn-success" formaction="ac?rType=addAuthor" name="add">Add</button>

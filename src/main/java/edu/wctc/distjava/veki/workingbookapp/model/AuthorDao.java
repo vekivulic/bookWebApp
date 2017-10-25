@@ -22,7 +22,7 @@ import java.util.Objects;
     private DataAccess db;
     private String driverClass;
     private String url;
-    private String userName;
+    private String username;
     private String password;
     
     private static final String AUTHOR_ID_COL_NAME = "author_id";
@@ -33,15 +33,15 @@ import java.util.Objects;
      * @param db
      * @param driverClass
      * @param url
-     * @param userName
+     * @param username
      * @param password 
      */
     public AuthorDao(DataAccess db, String driverClass, String url, String 
-            userName, String password) {
+            username, String password) {
         setDb(db);
         setDriverClass(driverClass);
         setUrl(url);
-        setUserName(userName);
+        setUsername(username);
         setPassword(password);
     }
     /**
@@ -56,7 +56,7 @@ import java.util.Objects;
     @Override
     public final int deleteAuthorById(String tableName, String authorIdColName, 
             Object authorId) throws ClassNotFoundException, SQLException{
-        db.openConnection(driverClass, url, userName, password);
+        db.openConnection(driverClass, url, username, password);
         int recsDeleted = db.deleteById(tableName, authorIdColName, authorId);
         db.closeConnection();
         return recsDeleted;
@@ -74,7 +74,7 @@ import java.util.Objects;
     public final Author retrieveAuthor(String authorTableName, String 
             authorIdColName, String authorId)throws ClassNotFoundException, 
             SQLException {
-        db.openConnection(driverClass, url, userName, password);
+        db.openConnection(driverClass, url, username, password);
         
         Map<String,Object> rawRec = db.getSingleRecord(
                 authorTableName, authorIdColName, authorId);
@@ -108,7 +108,7 @@ import java.util.Objects;
     @Override
     public final List<Author> getAuthorList(String tableName, int maxRecords) 
             throws ClassNotFoundException, SQLException{
-        db.openConnection(driverClass, url, userName, password);
+        db.openConnection(driverClass, url, username, password);
         
         List<Author> records = new ArrayList<>();      
         List<Map<String, Object>> rawData = db.getAllRecords(tableName, 
@@ -151,7 +151,7 @@ import java.util.Objects;
             List<Object> colValues, String authorIdColName, Object authorId) 
             throws SQLException, ClassNotFoundException{
         int authorRecordsUpdated = 0;
-        db.openConnection(driverClass, url, userName, password);
+        db.openConnection(driverClass, url, username, password);
         authorRecordsUpdated = db.updateById(authorTableName, colNames, 
                 colValues, authorIdColName, authorId);
         db.closeConnection();
@@ -171,7 +171,7 @@ import java.util.Objects;
             authorTableColNames, List<Object> authorTableColValues) 
             throws ClassNotFoundException, SQLException{
         int authorsAdded = 0;
-        db.openConnection(driverClass, url, userName, password);
+        db.openConnection(driverClass, url, username, password);
         authorsAdded = db.insertInto(tableName, authorTableColNames, authorTableColValues);
         db.closeConnection();
         return authorsAdded;
@@ -232,17 +232,17 @@ import java.util.Objects;
      * @return 
      */
     @Override
-    public final String getUserName() {
-        return userName;
+    public final String getUsername() {
+        return username;
     }
     /**
      * 
      * @param userName 
      */
     @Override
-    public final void setUserName(String userName) {
+    public final void setUsername(String username) {
         //VALIDATE
-        this.userName = userName;
+        this.username = username;
     }
     /**
      * 
@@ -270,7 +270,7 @@ import java.util.Objects;
         int hash = 3;
         hash = 97 * hash + Objects.hashCode(this.driverClass);
         hash = 97 * hash + Objects.hashCode(this.url);
-        hash = 97 * hash + Objects.hashCode(this.userName);
+        hash = 97 * hash + Objects.hashCode(this.username);
         hash = 97 * hash + Objects.hashCode(this.password);
         return hash;
     }
@@ -297,7 +297,7 @@ import java.util.Objects;
         if (!Objects.equals(this.url, other.url)) {
             return false;
         }
-        if (!Objects.equals(this.userName, other.userName)) {
+        if (!Objects.equals(this.username, other.username)) {
             return false;
         }
         if (!Objects.equals(this.password, other.password)) {

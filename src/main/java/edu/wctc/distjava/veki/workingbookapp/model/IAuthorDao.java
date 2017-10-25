@@ -102,7 +102,7 @@ public interface IAuthorDao {
      * 
      * @return 
      */
-    public abstract String getUserName();
+    public abstract String getUsername();
     /**
      * 
      * @return 
@@ -133,6 +133,6 @@ public interface IAuthorDao {
      * 
      * @param userName 
      */
-    public abstract void setUserName(String userName);
+    public abstract void setUsername(String username);
     
 }
